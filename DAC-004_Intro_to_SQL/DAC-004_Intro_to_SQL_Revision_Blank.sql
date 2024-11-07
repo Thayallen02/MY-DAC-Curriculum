@@ -21,7 +21,11 @@ ORDER BY jobtitle ASC;
 -- The third column heading is renamed to employee_id. Arranged the output in ascending order by lastname.
 
 --Answer
-
+SELECT 
+	firstName,
+	lastName,
+	businessentityid AS employee_id
+FROM person.person;
 -------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Q3: From the following table write a query in SQL to return only the rows for product that have a sellstartdate that is not NULL and a productline of 'T'. 
@@ -30,6 +34,13 @@ ORDER BY jobtitle ASC;
 -- production.product
 
 --Answer
+SELECT 
+	productid,
+	productnumber,
+	name
+FROM production.product
+WHERE sellstartdate IS NOT NULL
+	AND productline = 'T'
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -39,6 +50,11 @@ ORDER BY jobtitle ASC;
 -- sales.salesorderheader
 
 --Answer
+SELECT customerid, 
+       SUM(freight) AS total_freight
+FROM sales.salesorderheader
+GROUP BY customerid
+ORDER BY customerid ASC;
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -48,6 +64,17 @@ ORDER BY jobtitle ASC;
 -- person.businessentityaddress
 
 --Answer
+SELECT city, 
+       COUNT(*) AS number_of_employees
+FROM person.address
+GROUP BY city
+ORDER BY city ASC;
+
+SELECT *
+FROM person.businessentityaddress
+
+SELECT*
+FROM person.address
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -57,8 +84,23 @@ ORDER BY jobtitle ASC;
 -- person.businessentitycontact, person.contacttype, person.person
 
 --Answer
+SELECT businessentitycontact, 
+       contacttype, 
+       person
+FROM person.person AS p
+JOIN person.businessentitycontact AS bec 
+	ON p.BusinessEntityID = bec.BusinessEntityID
+JOIN person.contacttype AS contact_name 
+	ON businessentitycontact.ContactTypeID = contacttype.ContactTypeID
+WHERE contact_name = 'Purchasing Manager'
+ORDER BY p.LastName ASC, p.FirstName ASC;
 
--------------------------------------------------------------------------------------------------------------------------------------------
+SELECT *
+FROM person.businessentitycontact
+
+SELECT *
+FROM person.contacttype
+----------------------------------------------------------------------------------------------
 
 -- Q7: From the following table sales.salesorderdetail  write a query in  SQL to retrieve the total cost of each salesorderID that exceeds 100000. 
 -- Return SalesOrderID, total cost. Round to 2 decimal place and add the dollar sign at the front.
