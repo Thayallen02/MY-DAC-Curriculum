@@ -11,6 +11,9 @@
 -- humanresources.employee table
 
 --Answer
+SELECT *
+FROM humanresources.employee
+ORDER BY jobtitle ASC;
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
