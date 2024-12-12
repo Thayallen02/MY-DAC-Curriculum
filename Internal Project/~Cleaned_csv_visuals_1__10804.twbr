@@ -303,18 +303,29 @@
       </connection>
       <aliases enabled='yes' />
       <column caption='Admission Type1' datatype='string' name='[Admission Type]' role='dimension' type='nominal' />
+      <column datatype='real' name='[Billing Amount]' role='measure' type='quantitative' />
       <column caption='Age(Grouped)' datatype='string' name='[Calculation_148337334830309376]' role='dimension' type='nominal'>
         <calculation class='tableau' formula='IF [Age] &lt; 18 THEN &quot;Under 18&quot;&#13;&#10;ELSEIF [Age] &gt;= 18 AND [Age] &lt; 30 THEN &quot;18-29&quot;&#13;&#10;ELSEIF [Age] &gt;= 30 AND [Age] &lt; 50 THEN &quot;30-49&quot;&#13;&#10;ELSEIF [Age] &gt;= 50 AND [Age] &lt; 65 THEN &quot;50-64&quot;&#13;&#10;ELSE &quot;65 and Over&quot;&#13;&#10;END' />
       </column>
       <column caption='Room (grouped)' datatype='string' name='[Calculation_148337334834642945]' role='dimension' type='nominal'>
         <calculation class='tableau' formula='IF [Room Number] &lt; 200 THEN &quot;100-200&quot;&#13;&#10;ELSEIF [Room Number] &gt;= 200 AND [Room Number] &lt; 300 THEN &quot;200-300&quot;&#13;&#10;ELSEIF [Room Number] &gt;= 300 AND [Room Number] &lt; 400 THEN &quot;300-400&quot;&#13;&#10;ELSEIF [Room Number] &gt;= 400 AND [Room Number] &lt; 500 THEN &quot;400-500&quot;&#13;&#10;ELSE &quot;500 and Over&quot;&#13;&#10;END' />
       </column>
+      <column caption='Length of Stay' datatype='integer' name='[Calculation_760263936435965961]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='[Discharge Date]-[Date of Admission]' />
+      </column>
+      <column datatype='date' name='[Date of Admission]' role='dimension' type='ordinal' />
       <column caption='Insurance Provider1' datatype='string' name='[Insurance Provider]' role='dimension' type='nominal' />
       <column caption='Medical Condition1' datatype='string' name='[Medical Condition]' role='dimension' type='nominal' />
       <column datatype='integer' name='[Room Number]' role='dimension' type='ordinal' />
       <_.fcp.ObjectModelTableType.true...column caption='cleaned_file.csv' datatype='table' name='[__tableau_internal_object_id__].[cleaned_file.csv_9C308C8112D44D648B9DC55DA3F76772]' role='measure' type='quantitative' />
       <_.fcp.ObjectModelTableType.true...column caption='cleaned_file.csv1' datatype='table' name='[__tableau_internal_object_id__].[cleaned_file.csv_A0451358E2294011A14A0784417104F7]' role='measure' type='quantitative' />
+      <column-instance column='[Billing Amount]' derivation='Avg' name='[avg:Billing Amount:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[Calculation_760263936435965961]' derivation='Avg' name='[avg:Calculation_760263936435965961:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[Billing Amount]' derivation='Count' name='[cnt:Billing Amount:qk]' pivot='key' type='quantitative' />
       <column-instance column='[Medical Condition]' derivation='None' name='[none:Medical Condition:nk]' pivot='key' type='nominal' />
+      <column-instance column='[Calculation_760263936435965961]' derivation='Sum' name='[sum:Calculation_760263936435965961:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[Billing Amount]' derivation='Var' name='[var:Billing Amount:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[Date of Admission]' derivation='Year' name='[yr:Date of Admission:ok]' pivot='key' type='ordinal' />
       <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
       <style>
         <style-rule element='mark'>
@@ -336,6 +347,43 @@
             </map>
             <map to='#f28e2b'>
               <bucket>&quot;Asthma&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[:Measure Names]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;[federated.1j1zbju1tgx4er11jancp10vrpie].[avg:Billing Amount:qk]&quot;</bucket>
+            </map>
+            <map to='#4e79a7'>
+              <bucket>&quot;[federated.1j1zbju1tgx4er11jancp10vrpie].[cnt:Billing Amount:qk]&quot;</bucket>
+            </map>
+            <map to='#4e79a7'>
+              <bucket>&quot;[federated.1j1zbju1tgx4er11jancp10vrpie].[var:Billing Amount:qk]&quot;</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>&quot;[federated.1j1zbju1tgx4er11jancp10vrpie].[sum:Calculation_760263936435965961:qk]&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;[federated.1j1zbju1tgx4er11jancp10vrpie].[avg:Calculation_760263936435965961:qk]&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[yr:Date of Admission:ok]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>2019</bucket>
+            </map>
+            <map to='#59a14f'>
+              <bucket>2023</bucket>
+            </map>
+            <map to='#76b7b2'>
+              <bucket>2022</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>2021</bucket>
+            </map>
+            <map to='#edc948'>
+              <bucket>2024</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>2020</bucket>
             </map>
           </encoding>
         </style-rule>
@@ -649,6 +697,58 @@
       </table>
       <simple-id uuid='{B30C8B78-F90D-42AE-8708-483976E2A362}' />
     </worksheet>
+    <worksheet name='Sheet 7'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='cleaned_file' name='federated.1j1zbju1tgx4er11jancp10vrpie' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1j1zbju1tgx4er11jancp10vrpie'>
+            <column caption='Length of Stay' datatype='integer' name='[Calculation_760263936435965961]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='[Discharge Date]-[Date of Admission]' />
+            </column>
+            <column datatype='date' name='[Date of Admission]' role='dimension' type='ordinal' />
+            <column datatype='date' name='[Discharge Date]' role='dimension' type='ordinal' />
+            <column caption='Medical Condition1' datatype='string' name='[Medical Condition]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_760263936435965961]' derivation='Avg' name='[avg:Calculation_760263936435965961:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Date of Admission]' derivation='Month' name='[mn:Date of Admission:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Medical Condition]' derivation='None' name='[none:Medical Condition:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Date of Admission]' derivation='Quarter' name='[qr:Date of Admission:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Date of Admission]' derivation='Year' name='[yr:Date of Admission:ok]' pivot='key' type='ordinal' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.1j1zbju1tgx4er11jancp10vrpie].[mn:Date of Admission:ok]'>
+            <groupfilter function='level-members' level='[mn:Date of Admission:ok]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.1j1zbju1tgx4er11jancp10vrpie].[none:Medical Condition:nk]'>
+            <groupfilter function='level-members' level='[none:Medical Condition:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <filter class='categorical' column='[federated.1j1zbju1tgx4er11jancp10vrpie].[yr:Date of Admission:ok]'>
+            <groupfilter function='member' level='[yr:Date of Admission:ok]' member='2023' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.1j1zbju1tgx4er11jancp10vrpie].[none:Medical Condition:nk]</column>
+            <column>[federated.1j1zbju1tgx4er11jancp10vrpie].[yr:Date of Admission:ok]</column>
+            <column>[federated.1j1zbju1tgx4er11jancp10vrpie].[mn:Date of Admission:ok]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <encodings>
+              <color column='[federated.1j1zbju1tgx4er11jancp10vrpie].[yr:Date of Admission:ok]' />
+            </encodings>
+          </pane>
+        </panes>
+        <rows>[federated.1j1zbju1tgx4er11jancp10vrpie].[avg:Calculation_760263936435965961:qk]</rows>
+        <cols>([federated.1j1zbju1tgx4er11jancp10vrpie].[none:Medical Condition:nk] / ([federated.1j1zbju1tgx4er11jancp10vrpie].[yr:Date of Admission:ok] / ([federated.1j1zbju1tgx4er11jancp10vrpie].[qr:Date of Admission:ok] / [federated.1j1zbju1tgx4er11jancp10vrpie].[mn:Date of Admission:ok])))</cols>
+      </table>
+      <simple-id uuid='{A743472B-DE2D-4FCC-870B-FF1F09B539FE}' />
+    </worksheet>
   </worksheets>
   <windows source-height='30'>
     <window class='worksheet' name='Medical Condition VS Admission Type '>
@@ -679,7 +779,7 @@
       </cards>
       <simple-id uuid='{06DC9FF1-F3B6-46FB-9A27-CCFA12816195}' />
     </window>
-    <window class='worksheet' maximized='true' name='Medical Condition VS Admission Type (age grouped)'>
+    <window class='worksheet' name='Medical Condition VS Admission Type (age grouped)'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -809,6 +909,37 @@
         </edge>
       </cards>
       <simple-id uuid='{6B9AD5F0-A4CA-436C-931F-6DB3F6B4990A}' />
+    </window>
+    <window class='worksheet' maximized='true' name='Sheet 7'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card param='[federated.1j1zbju1tgx4er11jancp10vrpie].[mn:Date of Admission:ok]' type='filter' />
+            <card param='[federated.1j1zbju1tgx4er11jancp10vrpie].[yr:Date of Admission:ok]' type='filter' />
+            <card param='[federated.1j1zbju1tgx4er11jancp10vrpie].[none:Medical Condition:nk]' type='filter' />
+            <card pane-specification-id='0' param='[federated.1j1zbju1tgx4er11jancp10vrpie].[yr:Date of Admission:ok]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{96DC3DBF-4421-45C7-8C72-C7C33AEF1C46}' />
     </window>
   </windows>
 </workbook>
